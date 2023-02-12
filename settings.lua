@@ -1,12 +1,12 @@
 dofile("data/scripts/lib/mod_settings.lua")
-dofile("mods/siideri/files/adler.lua")
+dofile("mods/siideri/files/crc.lua")
 
 local mod_id = "siideri" -- This should match the name of your mod's folder.
 
 function mod_setting_checksum_label(mod_id, gui, in_main_menu, im_id, setting)
 	local seed_list = ModSettingGetNextValue("siideri.seed_list")
-	local checksum = adler32(seed_list)
-	GuiText(gui, mod_setting_group_x_offset, 0, string.format("Checksum: %08x", checksum))
+	local checksum = crc(seed_list)
+	GuiText(gui, mod_setting_group_x_offset, 0, string.format("Checksum: %04x", checksum))
 end
 
 

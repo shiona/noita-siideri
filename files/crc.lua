@@ -1,20 +1,27 @@
-
--- THIS IS NOT ANY WELL DEFINED CHECKSUM
+-- source: https://github.com/cloudwu/skynet/blob/master/lualib/skynet/db/redis/crc16.lua
+-- 
+-- Modified to use BitOp
 --
--- sorry about that.
--- I was about to use some CRC16, but lua in noita does
--- not seem to include bitwise operators. doing XOR with
--- arithmetic didn't sit well with me
+--/*
+-- This is the CRC16 algorithm used by Redis Cluster to hash keys.
+-- Implementation according to CCITT standards.
 --
--- Next I just translated adler32 from wikipedia into lua.
--- The problem was that small changes in the input caused only
--- small changes in the checksum, so I frankensteined some CRC
--- LUT into Adler32.
+-- This is actually the XMODEM CRC 16 algorithm, using the
+-- following parameters:
+--
+-- Name                       : "XMODEM", also known as "ZMODEM", "CRC-16/ACORN"
+-- Width                      : 16 bit
+-- Poly                       : 1021 (That is actually x^16 + x^12 + x^5 + 1)
+-- Initialization             : 0000
+-- Reflect Input byte         : False
+-- Reflect Output CRC         : False
+-- Xor constant to output CRC : 0000
+-- Output for "123456789"     : 31C3
+--*/
 
-local MOD_ADLER = 65521
+local band, bor, bxor = bit.band, bit.bor, bit.bxor
+local lshift, rshift, rol = bit.lshift, bit.rshift, bit.rol
 
--- Actually we use only a very small part of this table, since
--- it only gets accessed by the ascii values of 0-9 and ','
 local XMODEMCRC16Lookup = {
 	0x0000,0x1021,0x2042,0x3063,0x4084,0x50a5,0x60c6,0x70e7,
 	0x8108,0x9129,0xa14a,0xb16b,0xc18c,0xd1ad,0xe1ce,0xf1ef,
@@ -50,17 +57,12 @@ local XMODEMCRC16Lookup = {
 	0x6e17,0x7e36,0x4e55,0x5e74,0x2e93,0x3eb2,0x0ed1,0x1ef0
 }
 
-function adler32(bytes)
-	local a = 1;
-	local b = 0;
-	
-	for i = 1,#bytes do
-		local byte = string.byte(bytes, i, i)
-		local x = XMODEMCRC16Lookup[byte]
-		a = (a + x) % MOD_ADLER
-		b = (b + a) % MOD_ADLER
+function crc(bytes)
+	local crc = 0
+	for i=1,#bytes do
+		local b = string.byte(bytes,i,i)
+		crc = bxor(band(lshift(crc, 8), 0xffff), XMODEMCRC16Lookup[band(bxor(rshift(crc, 8), b), 0xff) + 1])
 	end
-
-	return b * 65536 + a
+	return tonumber(crc)
 end
 
