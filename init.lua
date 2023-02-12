@@ -1,5 +1,5 @@
 
-function split (inputstr, sep)
+function split(inputstr, sep)
   if sep == nil then
     sep = "%s"
   end
@@ -12,7 +12,7 @@ end
 
 seeds = {}
 
-seed_list = ModSettingGet("SRSeed.seed_list" )
+seed_list = ModSettingGet("siideri.seed_list")
 if (seed_list ~= "") then
   seeds = split(seed_list, ",")
 end
@@ -29,14 +29,14 @@ end
 -- if index has run past the given list, does nothing,
 -- player gets a random seed and this mod does nothing
 function set_next_seed()
-  index = tonumber(ModSettingGet("SRSeed.seed_index"))
+  index = tonumber(ModSettingGet("siideri.seed_index"))
   print("Read seed index " .. tonumber(index) .. " from settings")
   if(seeds[index] ~= nil)then
     local seed = seeds[index]
     index = index + 1
     print("Doing my best to set next index to " .. tostring(index))
-    ModSettingSetNextValue("SRSeed.seed_index", tostring(index), false)
-    local next_index = ModSettingGetNextValue("SRSeed.seed_index")
+    ModSettingSetNextValue("siideri.seed_index", tostring(index), false)
+    local next_index = ModSettingGetNextValue("siideri.seed_index")
     print("Next index is "..next_index)
     print("Setting seed: "..seed)
     SetWorldSeed(tonumber(seed))

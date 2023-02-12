@@ -1,27 +1,27 @@
 dofile("data/scripts/lib/mod_settings.lua")
-dofile("mods/srseed/files/adler.lua")
+dofile("mods/siideri/files/adler.lua")
 
-local mod_id = "SRSeed" -- This should match the name of your mod's folder.
+local mod_id = "siideri" -- This should match the name of your mod's folder.
 
 function mod_setting_checksum_label(mod_id, gui, in_main_menu, im_id, setting)
-	local seed_list = ModSettingGetNextValue("SRSeed.seed_list")
+	local seed_list = ModSettingGetNextValue("siideri.seed_list")
 	local checksum = adler32(seed_list)
 	GuiText(gui, mod_setting_group_x_offset, 0, string.format("Checksum: %08x", checksum))
 end
 
 
 function mod_setting_load_button(mod_id, gui, in_main_menui, im_id, setting)
-	local text = "Load (mods/srseed/files/seed_list.txt)"
+	local text = "Load (mods/siideri/files/seed_list.txt)"
 	local button = GuiButton(gui, im_id, mod_setting_group_x_offset, 0, text)
 	if (button) then 
-		local raw = ModTextFileGetContent("mods/srseed/files/seed_list.txt")
+		local raw = ModTextFileGetContent("mods/siideri/files/seed_list.txt")
 		local filtered = string.gsub(raw, "[^0-9,]", "")
 
 		if filtered == nil or filtered == "" then
 			-- Would be nice if this could persist on the screen for a moment
 			GuiText(gui, mod_setting_group_x_offset, 0, "Could not read the file")
 		else
-			ModSettingSetNextValue("SRSeed.seed_list", filtered, false);
+			ModSettingSetNextValue("siideri.seed_list", filtered, false);
 		end
 	end
 end
