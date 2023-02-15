@@ -2,6 +2,16 @@
 
 Created to help racing / competing
 
+## Installation
+
+Either
+ - git clone this repo to `Noita/mods` directory, or
+ - download the latest release, unzip it to `Noita/mods` **and** make sure the mod
+   directory name is `siideri` without any version numbers or anything like that.
+
+Unfortunately how Noita mods work, it seems this mod would not work if distributed
+via steam workshop. Or so I am told.
+
 ## To use:
 
 Create/modify the file `mods/siideri/files/seed_list.txt` to contain the list of
