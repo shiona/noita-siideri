@@ -30,6 +30,8 @@ end
 -- player gets a random seed and this mod does nothing
 function set_next_seed()
   index = tonumber(ModSettingGet("siideri.seed_index"))
+  running_seed = ModSettingGet("siideri.running_seed")
+
   print("Read seed index " .. tonumber(index) .. " from settings")
   if(seeds[index] ~= nil)then
     local seed = seeds[index]
@@ -41,7 +43,19 @@ function set_next_seed()
     print("Setting seed: "..seed)
     SetWorldSeed(tonumber(seed))
   else
-    print("Seed index was nil, playing a random game")
+    if(running_seed) then
+      print("Seed index was nil, incrementing seed by one")
+      local seed_count = table.getn(seeds)
+      local last_seed = seeds[seed_count]
+
+      local over = index - seed_count
+      local seed = last_seed + over
+      print("Setting seed: "..seed)
+      SetWorldSeed(tonumber(seed))
+
+    else
+      print("Seed index was nil, playing a random game")
+    end
   end
 end
 

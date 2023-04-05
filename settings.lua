@@ -47,6 +47,13 @@ mod_settings =
 		allowed_characters = "0123456789",
 	},
 	{
+		id = "running_seed",
+		ui_name = "Running seed",
+		ui_description = "When past the seed list, count upwards from the last one",
+		value_default = false,
+		scope = MOD_SETTING_SCOPE_NEW_GAME,
+	},
+	{
 		id = "crc",
 		ui_name = "CRC",
 		value_default = "xxxx",
