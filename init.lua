@@ -50,8 +50,14 @@ function set_next_seed()
 
       local over = index - seed_count
       local seed = last_seed + over
+
+      index = index + 1
+      print("Doing my best to set next index to " .. tostring(index))
+      ModSettingSetNextValue("siideri.seed_index", tostring(index), false)
+
       print("Setting seed: "..seed)
       SetWorldSeed(tonumber(seed))
+      
 
     else
       print("Seed index was nil, playing a random game")
